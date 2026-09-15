@@ -217,6 +217,12 @@ export default function Home() {
                   role: "Publicitário",
                   alt: "Matheus Gonzaga, publicitário da equipe AGBunny",
                 },
+                {
+                  src: "/team-nilon.jpg",
+                  name: "Nilon Moura",
+                  role: "Contador",
+                  alt: "Nilon Moura, contador da equipe AGBunny",
+                },
               ].map((member) => (
                 <motion.article
                   key={member.name}
