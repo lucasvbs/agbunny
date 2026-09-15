@@ -1,0 +1,28 @@
+kind = "web"
+previewPath = "/"
+title = "AGBunny"
+description = "Landing page institucional e comercial da AGBunny, agência full-stack de tecnologia, com apresentação de serviços, processo, benefícios, FAQ, CTAs de contato e dados empresariais."
+version = "1.0.0"
+id = "artifacts/agbunny-site"
+router = "path"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 18507
+
+[services.development]
+run = "pnpm --filter @workspace/agbunny-site run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/agbunny-site", "run", "build" ]
+serve = "static"
+publicDir = "artifacts/agbunny-site/dist/public"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "18507"
+BASE_PATH = "/"
