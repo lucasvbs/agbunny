@@ -163,6 +163,85 @@ export default function Home() {
           </div>
         </section>
 
+        {/* EQUIPE */}
+        <section id="equipe" className="relative border-b border-white/5 bg-background py-24 md:py-32">
+          <div className="container mx-auto max-w-6xl px-6">
+            <motion.div
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: "-80px" }}
+              variants={staggerContainer}
+              className="mx-auto mb-14 max-w-3xl text-center"
+            >
+              <motion.div variants={fadeUp} className="mb-5 inline-flex items-center gap-2 rounded-full border border-cyan-500/25 bg-cyan-500/10 px-3 py-1.5 text-sm font-medium text-cyan-300">
+                <span className="h-1.5 w-1.5 rounded-full bg-cyan-400 shadow-[0_0_12px_rgba(34,211,238,0.8)]" />
+                Quem faz acontecer
+              </motion.div>
+              <motion.h2 variants={fadeUp} className="text-4xl font-display font-bold md:text-5xl">
+                A equipe por trás da AGBunny
+              </motion.h2>
+              <motion.p variants={fadeUp} className="mt-5 text-lg leading-relaxed text-muted-foreground">
+                Diferentes especialidades trabalhando juntas para transformar ideias em presença digital, design e tecnologia.
+              </motion.p>
+            </motion.div>
+
+            <motion.div
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: "-60px" }}
+              variants={staggerContainer}
+              className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4"
+            >
+              {[
+                {
+                  src: "/team-wander.jpg",
+                  name: "Wander Fabrício",
+                  role: "Advogado",
+                  alt: "Wander Fabrício, advogado da equipe AGBunny",
+                },
+                {
+                  src: "/team-lucas.jpg",
+                  name: "Lucas Vinicius",
+                  role: "Web Designer",
+                  alt: "Lucas Vinicius, web designer da equipe AGBunny",
+                },
+                {
+                  src: "/team-leo.jpg",
+                  name: "Leo",
+                  role: "Diretor de arte chefe",
+                  alt: "Leo, diretor de arte chefe da equipe AGBunny",
+                },
+                {
+                  src: "/team-matheus.jpg",
+                  name: "Matheus Gonzaga",
+                  role: "Publicitário",
+                  alt: "Matheus Gonzaga, publicitário da equipe AGBunny",
+                },
+              ].map((member) => (
+                <motion.article
+                  key={member.name}
+                  variants={fadeUp}
+                  className="glass-card group overflow-hidden rounded-2xl border border-white/8 transition-all duration-300 hover:-translate-y-1 hover:border-cyan-500/30 hover:shadow-[0_20px_45px_-25px_rgba(0,168,232,0.7)]"
+                >
+                  <div className="relative aspect-square overflow-hidden bg-cyan-950/20">
+                    <img
+                      src={member.src}
+                      alt={member.alt}
+                      loading="lazy"
+                      className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-background/70 via-transparent to-transparent opacity-70" />
+                  </div>
+                  <div className="p-5">
+                    <h3 className="font-display text-xl font-semibold text-foreground">{member.name}</h3>
+                    <p className="mt-1 text-sm font-medium text-cyan-400">{member.role}</p>
+                  </div>
+                </motion.article>
+              ))}
+            </motion.div>
+          </div>
+        </section>
+
         {/* PROPOSTA DE VALOR & DORES */}
         <section className="py-24 relative border-t border-white/5 bg-background/50">
           <div className="container mx-auto px-6 max-w-6xl">
