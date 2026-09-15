@@ -11,7 +11,8 @@ import {
   Zap,
   ShieldCheck,
   Clock,
-  ChevronRight
+  ChevronRight,
+  Play
 } from "lucide-react";
 
 const fadeUp = {
@@ -96,6 +97,67 @@ export default function Home() {
                 <p className="text-xs text-muted-foreground sm:ml-4">
                   Resposta em até 1 dia útil • Sem compromisso
                 </p>
+              </motion.div>
+            </motion.div>
+          </div>
+        </section>
+
+        {/* DESTAQUE EM VÍDEO */}
+        <section id="video-destaque" className="relative border-y border-cyan-500/10 bg-cyan-950/10 py-20 md:py-24 overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-mesh opacity-60" />
+          <div className="absolute -left-32 top-1/2 h-80 w-80 -translate-y-1/2 rounded-full bg-cyan-500/10 blur-[100px]" />
+          <div className="absolute -right-32 bottom-0 h-80 w-80 rounded-full bg-blue-600/10 blur-[100px]" />
+
+          <div className="container relative z-10 mx-auto grid max-w-6xl items-center gap-10 px-6 lg:grid-cols-[1.15fr_0.85fr] lg:gap-16">
+            <motion.div
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: "-80px" }}
+              variants={fadeUp}
+              className="group relative overflow-hidden rounded-3xl border border-white/10 bg-black/30 p-2 shadow-[0_24px_80px_-30px_rgba(0,168,232,0.55)]"
+            >
+              <div className="pointer-events-none absolute inset-0 z-10 rounded-[1.35rem] ring-1 ring-inset ring-white/10" />
+              <video
+                className="aspect-video w-full rounded-[1.15rem] object-cover transition-transform duration-700 group-hover:scale-[1.015]"
+                src="/video-bunny-servicos.mp4"
+                poster="/video-bunny-poster.jpg"
+                controls
+                autoPlay
+                muted
+                loop
+                playsInline
+                preload="metadata"
+                aria-label="Vídeo mostrando exemplos de projetos e serviços da AGBunny"
+              />
+              <div className="pointer-events-none absolute bottom-5 left-5 z-20 flex items-center gap-2 rounded-full border border-white/15 bg-black/55 px-3 py-1.5 text-xs font-medium text-white backdrop-blur-md">
+                <Play className="h-3.5 w-3.5 fill-cyan-400 text-cyan-400" />
+                Veja um pouco do que podemos fazer
+              </div>
+            </motion.div>
+
+            <motion.div
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: "-80px" }}
+              variants={staggerContainer}
+              className="max-w-xl"
+            >
+              <motion.div variants={fadeUp} className="mb-5 inline-flex items-center gap-2 rounded-full border border-cyan-500/25 bg-cyan-500/10 px-3 py-1.5 text-sm font-medium text-cyan-300">
+                <span className="h-1.5 w-1.5 rounded-full bg-cyan-400 shadow-[0_0_12px_rgba(34,211,238,0.8)]" />
+                Do conceito à entrega
+              </motion.div>
+              <motion.h2 variants={fadeUp} className="text-3xl font-display font-bold leading-tight md:text-4xl">
+                Design que chama atenção. Tecnologia que funciona.
+              </motion.h2>
+              <motion.p variants={fadeUp} className="mt-5 text-lg leading-relaxed text-muted-foreground">
+                Uma amostra do tipo de trabalho que a AGBunny desenvolve para transformar presença digital em uma experiência profissional, clara e pronta para gerar negócio.
+              </motion.p>
+              <motion.div variants={fadeUp} className="mt-7 flex flex-wrap gap-2">
+                {["Identidade visual", "Sites profissionais", "Soluções digitais"].map((service) => (
+                  <span key={service} className="rounded-full border border-white/10 bg-white/[0.04] px-3 py-1.5 text-sm text-cyan-100/80">
+                    {service}
+                  </span>
+                ))}
               </motion.div>
             </motion.div>
           </div>

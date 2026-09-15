@@ -1,31 +1,18 @@
-import { MessageSquare } from "lucide-react";
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import React from "react";
 
-export function ContactModal({ children }: { children: React.ReactNode }) {
-  return (
-    <Dialog>
-      <DialogTrigger asChild>
-        {children}
-      </DialogTrigger>
-      <DialogContent className="sm:max-w-md border-cyan-500/20 bg-background/95 backdrop-blur-3xl">
-        <DialogHeader>
-          <DialogTitle className="text-2xl font-display flex items-center gap-2">
-            <MessageSquare className="w-5 h-5 text-cyan-400" />
-            Vamos conversar
-          </DialogTitle>
-          <DialogDescription className="text-base mt-2">
-            O canal oficial de atendimento será publicado aqui em breve.
-            Assim, você sempre falará com a equipe certa, sem depender de um
-            número ou endereço não confirmado.
-          </DialogDescription>
-        </DialogHeader>
-        <div className="mt-4 rounded-lg border border-cyan-500/15 bg-cyan-500/5 p-4">
-          <p className="text-sm leading-relaxed text-cyan-50/80">
-            Atendimento comercial da AGBunny — LS Design e Desenvolvimento
-            Ltda., CNPJ 50.416.508/0001-43.
-          </p>
-        </div>
-      </DialogContent>
-    </Dialog>
-  );
+const WHATSAPP_NUMBER = "556191843270";
+const WHATSAPP_MESSAGE =
+  "Olá! Vim pelo site da AGBunny e gostaria de receber mais informações sobre os serviços. Podem me ajudar?";
+const WHATSAPP_URL = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(WHATSAPP_MESSAGE)}`;
+
+type ContactButton = React.ReactElement<{
+  onClick?: React.MouseEventHandler<HTMLElement>;
+}>;
+
+export function ContactModal({ children }: { children: ContactButton }) {
+  return React.cloneElement(children, {
+    onClick: () => {
+      window.open(WHATSAPP_URL, "_blank", "noopener,noreferrer");
+    },
+  });
 }
