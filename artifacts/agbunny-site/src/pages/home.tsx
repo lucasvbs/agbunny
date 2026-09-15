@@ -178,7 +178,7 @@ export default function Home() {
                 Quem faz acontecer
               </motion.div>
               <motion.h2 variants={fadeUp} className="text-4xl font-display font-bold md:text-5xl">
-                A equipe por trás da AGBunny
+                As mentes que fazem acontecer
               </motion.h2>
               <motion.p variants={fadeUp} className="mt-5 text-lg leading-relaxed text-muted-foreground">
                 Diferentes especialidades trabalhando juntas para transformar ideias em presença digital, design e tecnologia.
