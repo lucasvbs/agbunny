@@ -44,8 +44,7 @@ export default function Home() {
       >
         <div className="container mx-auto px-6 h-20 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <img src="/logo-agbunny.jpeg" alt="AGBunny Logo" className="w-10 h-10 rounded-full border border-white/10" />
-            <span className="font-display font-bold text-xl tracking-tight">AGBUNNY</span>
+            <img src="/logo-agbunny-new.png" alt="Anti-Gravity Bunny" className="h-16 w-auto object-contain" />
           </div>
           <ContactModal>
             <Button variant="ghost" className="text-sm font-medium hover:text-cyan-400">
