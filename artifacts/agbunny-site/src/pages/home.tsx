@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { ContactModal } from "@/components/contact-modal";
 import { Button } from "@/components/ui/button";
@@ -12,6 +13,9 @@ import {
   ShieldCheck,
   Clock,
   ChevronRight,
+  ChevronDown,
+  Menu,
+  X,
   Play
 } from "lucide-react";
 
@@ -30,7 +34,16 @@ const staggerContainer = {
   }
 };
 
+const navLinks = [
+  { href: "#servicos", label: "Serviços" },
+  { href: "#equipe", label: "Equipe" },
+  { href: "#como-funciona", label: "Como funciona" },
+  { href: "#faq", label: "FAQ" },
+];
+
 export default function Home() {
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
   return (
     <div className="min-h-screen bg-background text-foreground overflow-x-hidden selection:bg-cyan-500/30 selection:text-cyan-100">
       <div className="bg-noise" />
@@ -42,22 +55,87 @@ export default function Home() {
         transition={{ duration: 0.8, ease: "easeOut" }}
         className="fixed top-0 left-0 right-0 z-40 border-b border-white/5 bg-background/60 backdrop-blur-xl"
       >
-        <div className="container mx-auto px-6 h-20 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <img src="/logo-agbunny-new.png" alt="Anti-Gravity Bunny" className="h-16 w-auto object-contain" />
+        <div className="container relative mx-auto flex h-20 items-center justify-between px-6">
+          <a href="#top" aria-label="Voltar ao início da AGBunny" className="flex items-center">
+            <img
+              src="/logo-agbunny-new.png"
+              alt="Anti-Gravity Bunny"
+              className="hidden h-12 w-auto object-contain min-[390px]:block sm:h-14"
+            />
+            <img
+              src="/logo-agbunny-symbol.png"
+              alt=""
+              aria-hidden="true"
+              className="block h-10 w-9 object-cover object-right min-[390px]:hidden"
+            />
+          </a>
+
+          <div className="hidden items-center gap-7 md:flex">
+            <div className="flex items-center gap-6">
+              {navLinks.map((link) => (
+                <a
+                  key={link.href}
+                  href={link.href}
+                  className="text-sm font-medium text-muted-foreground transition-colors hover:text-cyan-400"
+                >
+                  {link.label}
+                </a>
+              ))}
+            </div>
+            <ContactModal>
+              <Button variant="ghost" className="text-sm font-medium hover:text-cyan-400">
+                Falar com a equipe
+              </Button>
+            </ContactModal>
           </div>
-          <ContactModal>
-            <Button variant="ghost" className="text-sm font-medium hover:text-cyan-400">
-              Falar com a equipe
-            </Button>
-          </ContactModal>
+
+          <button
+            type="button"
+            aria-expanded={isMobileMenuOpen}
+            aria-controls="mobile-navigation"
+            aria-label={isMobileMenuOpen ? "Fechar menu" : "Abrir menu"}
+            onClick={() => setIsMobileMenuOpen((open) => !open)}
+            className="rounded-lg border border-white/10 p-2 text-cyan-300 transition-colors hover:border-cyan-400/40 hover:bg-cyan-500/10 md:hidden"
+          >
+            {isMobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+          </button>
         </div>
+
+        {isMobileMenuOpen && (
+          <motion.div
+            id="mobile-navigation"
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            className="border-t border-white/5 bg-background/95 px-6 py-5 backdrop-blur-xl md:hidden"
+          >
+            <div className="container mx-auto flex flex-col gap-1">
+              {navLinks.map((link) => (
+                <a
+                  key={link.href}
+                  href={link.href}
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="rounded-lg px-3 py-3 text-base font-medium text-muted-foreground transition-colors hover:bg-white/[0.04] hover:text-cyan-300"
+                >
+                  {link.label}
+                </a>
+              ))}
+              <ContactModal>
+                <Button
+                  className="mt-3 w-full bg-cyan-600 text-white hover:bg-cyan-500"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  Falar com a equipe
+                </Button>
+              </ContactModal>
+            </div>
+          </motion.div>
+        )}
       </motion.nav>
 
       <main className="pt-20">
         
         {/* HERO SECTION */}
-        <section className="relative min-h-[90vh] flex items-center justify-center pt-16 pb-32 overflow-hidden">
+        <section id="top" className="relative flex min-h-[clamp(640px,78vh,820px)] items-center justify-center overflow-hidden scroll-mt-20 px-0 pb-28 pt-10 md:pb-24 md:pt-16">
           {/* Background effects */}
           <div className="absolute inset-0 bg-gradient-mesh z-0" />
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-cyan-600/10 rounded-full blur-[120px] pointer-events-none" />
@@ -67,7 +145,7 @@ export default function Home() {
               initial="hidden"
               animate="visible"
               variants={staggerContainer}
-              className="space-y-8"
+              className="space-y-7"
             >
               <motion.div variants={fadeUp} className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-cyan-500/30 bg-cyan-500/10 text-cyan-300 text-sm font-medium mb-4">
                 <span className="relative flex h-2 w-2">
@@ -86,7 +164,7 @@ export default function Home() {
                 Social media, site, sistema web — sua empresa não precisa de 5 fornecedores diferentes pra cuidar da tecnologia. A AGBunny resolve tudo com uma equipe que tem mais de 15 anos de experiência.
               </motion.p>
               
-              <motion.div variants={fadeUp} className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
+              <motion.div variants={fadeUp} className="flex flex-col items-center justify-center gap-4 pt-2 sm:flex-row">
                 <ContactModal>
                   <Button size="xl" className="w-full sm:w-auto bg-cyan-600 hover:bg-cyan-500 text-white group shadow-[0_0_40px_-10px_rgba(0,168,232,0.5)] border border-cyan-400/50">
                     Falar com a AGBunny
@@ -97,8 +175,25 @@ export default function Home() {
                   Resposta em até 1 dia útil • Sem compromisso
                 </p>
               </motion.div>
+
+              <motion.div variants={fadeUp} className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-xs font-medium text-cyan-100/60">
+                <span><strong className="text-cyan-300">15+</strong> anos de experiência combinada</span>
+                <span className="hidden h-1 w-1 rounded-full bg-cyan-400/50 sm:block" />
+                <span>Design <span className="text-cyan-400">•</span> Sites <span className="text-cyan-400">•</span> Sistemas</span>
+              </motion.div>
             </motion.div>
           </div>
+
+          <motion.a
+            href="#video-destaque"
+            aria-label="Continuar para o destaque em vídeo"
+            animate={{ y: [0, 5, 0] }}
+            transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
+            className="absolute bottom-5 left-1/2 flex -translate-x-1/2 flex-col items-center gap-1 text-[10px] font-medium uppercase tracking-[0.18em] text-cyan-200/50 transition-colors hover:text-cyan-300"
+          >
+            <span>Continuar</span>
+            <ChevronDown className="h-4 w-4" />
+          </motion.a>
         </section>
 
         {/* DESTAQUE EM VÍDEO */}
@@ -163,7 +258,7 @@ export default function Home() {
         </section>
 
         {/* EQUIPE */}
-        <section id="equipe" className="relative border-b border-white/5 bg-background py-24 md:py-32">
+        <section id="equipe" className="relative scroll-mt-24 border-b border-white/5 bg-background py-24 md:py-32">
           <div className="container mx-auto max-w-6xl px-6">
             <motion.div
               initial="hidden"
@@ -189,7 +284,7 @@ export default function Home() {
               whileInView="visible"
               viewport={{ once: true, margin: "-60px" }}
               variants={staggerContainer}
-              className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4"
+              className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-6 xl:grid-cols-5"
             >
               {[
                 {
@@ -222,11 +317,11 @@ export default function Home() {
                   role: "Contador",
                   alt: "Nilon Moura, contador da equipe AGBunny",
                 },
-              ].map((member) => (
+              ].map((member, index) => (
                 <motion.article
                   key={member.name}
                   variants={fadeUp}
-                  className="glass-card group overflow-hidden rounded-2xl border border-white/8 transition-all duration-300 hover:-translate-y-1 hover:border-cyan-500/30 hover:shadow-[0_20px_45px_-25px_rgba(0,168,232,0.7)]"
+                  className={`glass-card group overflow-hidden rounded-2xl border border-white/8 transition-all duration-300 hover:-translate-y-1 hover:border-cyan-500/30 hover:shadow-[0_20px_45px_-25px_rgba(0,168,232,0.7)] lg:col-span-2 xl:col-span-1 xl:col-start-auto ${index === 3 ? "lg:col-start-2" : ""} ${index === 4 ? "lg:col-start-4" : ""}`}
                 >
                   <div className="relative aspect-square overflow-hidden bg-cyan-950/20">
                     <img
@@ -295,7 +390,7 @@ export default function Home() {
         </section>
 
         {/* SOLUÇÃO & BENEFÍCIOS */}
-        <section className="py-32 relative">
+        <section id="servicos" className="relative scroll-mt-24 py-32">
           <div className="container mx-auto px-6 max-w-6xl">
             <div className="text-center max-w-3xl mx-auto mb-20">
               <motion.h2 
@@ -393,7 +488,7 @@ export default function Home() {
         </section>
 
         {/* COMO FUNCIONA & OFERTA */}
-        <section className="py-24 relative border-t border-white/5 bg-background">
+        <section id="como-funciona" className="relative scroll-mt-24 border-t border-white/5 bg-background py-24">
           <div className="container mx-auto px-6 max-w-5xl">
             <div className="grid md:grid-cols-2 gap-16">
               
@@ -466,7 +561,7 @@ export default function Home() {
         </section>
 
         {/* FAQ */}
-        <section className="py-24 relative border-t border-white/5">
+        <section id="faq" className="relative scroll-mt-24 border-t border-white/5 py-24">
           <div className="container mx-auto px-6 max-w-3xl">
             <motion.div
               initial="hidden"
@@ -568,9 +663,8 @@ export default function Home() {
       {/* FOOTER */}
       <footer className="py-12 border-t border-white/5 bg-background/80">
         <div className="container mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-6">
-          <div className="flex items-center gap-3 opacity-50 grayscale">
-            <img src="/logo-agbunny.jpeg" alt="AGBunny Logo" className="w-8 h-8 rounded-full" />
-            <span className="font-display font-bold tracking-tight text-white">AGBUNNY</span>
+          <div className="flex items-center opacity-50 grayscale">
+            <img src="/logo-agbunny-new.png" alt="Anti-Gravity Bunny" className="h-12 w-auto max-w-[140px] object-contain" />
           </div>
           
           <div className="text-center md:text-right text-xs text-muted-foreground/60 space-y-1">
