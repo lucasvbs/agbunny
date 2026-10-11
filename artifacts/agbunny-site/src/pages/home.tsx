@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { ContactModal } from "@/components/contact-modal";
 import { Button } from "@/components/ui/button";
@@ -16,6 +16,7 @@ import {
   ChevronDown,
   Menu,
   X,
+  Download,
   Play
 } from "lucide-react";
 
@@ -40,6 +41,89 @@ const navLinks = [
   { href: "#como-funciona", label: "Como funciona" },
   { href: "#faq", label: "FAQ" },
 ];
+
+type InstallPromptEvent = Event & {
+  prompt: () => Promise<void>;
+  userChoice: Promise<{ outcome: "accepted" | "dismissed" }>;
+};
+
+function InstallAppButton({ className = "" }: { className?: string }) {
+  const [installPrompt, setInstallPrompt] = useState<InstallPromptEvent | null>(null);
+  const [instructions, setInstructions] = useState("");
+  const [isInstalled, setIsInstalled] = useState(false);
+
+  useEffect(() => {
+    const updateInstalledState = () => {
+      setIsInstalled(window.matchMedia("(display-mode: standalone)").matches);
+    };
+    const captureInstallPrompt = (event: Event) => {
+      event.preventDefault();
+      setInstallPrompt(event as InstallPromptEvent);
+    };
+    const markInstalled = () => {
+      setIsInstalled(true);
+      setInstallPrompt(null);
+      setInstructions("AGBunny instalado com sucesso.");
+    };
+
+    updateInstalledState();
+    window.addEventListener("beforeinstallprompt", captureInstallPrompt);
+    window.addEventListener("appinstalled", markInstalled);
+    return () => {
+      window.removeEventListener("beforeinstallprompt", captureInstallPrompt);
+      window.removeEventListener("appinstalled", markInstalled);
+    };
+  }, []);
+
+  const handleInstall = async () => {
+    if (isInstalled) {
+      setInstructions("O app AGBunny já está instalado neste dispositivo.");
+      return;
+    }
+
+    if (installPrompt) {
+      await installPrompt.prompt();
+      const choice = await installPrompt.userChoice;
+      setInstallPrompt(null);
+      setInstructions(
+        choice.outcome === "accepted"
+          ? "Confirme a instalação na mensagem do seu navegador."
+          : "Tudo bem — você pode instalar o app mais tarde por este botão."
+      );
+      return;
+    }
+
+    const userAgent = navigator.userAgent;
+    const isAppleMobile = /iPhone|iPad|iPod/i.test(userAgent)
+      || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+
+    setInstructions(
+      isAppleMobile
+        ? "No iPhone ou iPad: toque em Compartilhar no Safari e escolha “Adicionar à Tela de Início”."
+        : "No menu do navegador, escolha “Instalar app” ou “Adicionar à tela inicial”."
+    );
+  };
+
+  if (isInstalled) return null;
+
+  return (
+    <div className={className}>
+      <button
+        type="button"
+        onClick={() => void handleInstall()}
+        className="inline-flex min-h-11 items-center justify-center gap-2 rounded-lg border border-cyan-400/25 bg-cyan-500/10 px-4 py-2 text-sm font-semibold text-cyan-200 transition-colors hover:border-cyan-300/50 hover:bg-cyan-500/15"
+      >
+        <Download className="h-4 w-4" />
+        Instalar app
+      </button>
+      {instructions && (
+        <p role="status" className="mt-2 max-w-xs text-xs leading-relaxed text-muted-foreground">
+          {instructions}
+        </p>
+      )}
+    </div>
+  );
+}
 
 export default function Home() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -127,6 +211,7 @@ export default function Home() {
                   Falar com a equipe
                 </Button>
               </ContactModal>
+              <InstallAppButton className="mt-2" />
             </div>
           </motion.div>
         )}
@@ -662,9 +747,12 @@ export default function Home() {
 
       {/* FOOTER */}
       <footer className="py-12 border-t border-white/5 bg-background/80">
-        <div className="container mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-6">
-          <div className="flex items-center opacity-50 grayscale">
-            <img src="/logo-agbunny-new.png" alt="Anti-Gravity Bunny" className="h-12 w-auto max-w-[140px] object-contain" />
+        <div className="container mx-auto flex flex-col items-center justify-between gap-6 px-6 md:flex-row">
+          <div className="flex flex-col items-center gap-4 md:items-start">
+            <div className="flex items-center opacity-50 grayscale">
+              <img src="/logo-agbunny-new.png" alt="Anti-Gravity Bunny" className="h-12 w-auto max-w-[140px] object-contain" />
+            </div>
+            <InstallAppButton />
           </div>
           
           <div className="text-center md:text-right text-xs text-muted-foreground/60 space-y-1">
